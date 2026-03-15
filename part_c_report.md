@@ -53,6 +53,7 @@ The raw evaluation penalized the system for many differences that do not reflect
 - Hebrew vowel marks, diacritics, and quote marks
 - spelling variants that keep the same meaning
 - orthographic variants of common Hebrew words
+- some date, number, and percentage expressions that appeared in equivalent surface forms
 
 The goal was to change only surface form differences and same-meaning variants, as required by the assignment, and not to rewrite genuinely different content.
 
@@ -64,6 +65,7 @@ The final normalization pipeline performs:
 2. removal of punctuation and quote-like symbols
 3. whitespace normalization
 4. normalization of common Hebrew word variants that preserve the same meaning
+5. normalization of selected date, number, and percentage forms used in equivalent contexts
 
 ### Iterative improvement
 
@@ -71,7 +73,7 @@ The normalization was developed in stages and evaluated after each stage on the 
 
 1. Raw baseline evaluation: `WER 0.3592`
 2. Conservative normalization of vowel marks and punctuation: WER dropped substantially relative to the raw baseline
-3. Expanded normalization of same-meaning orthographic variants: `WER 0.0601`
+3. Expanded normalization of same-meaning orthographic variants and selected numeric/date forms: `WER 0.0567`
 
 ### Final clean-benchmark results
 
@@ -82,10 +84,10 @@ The normalization was developed in stages and evaluated after each stage on the 
 
 Final normalized results on the clean benchmark:
 
-- WER: `0.0601`
-- Recall: `0.9432`
-- Precision: `0.9444`
-- F1: `0.9438`
+- WER: `0.0567`
+- Recall: `0.9465`
+- Precision: `0.9475`
+- F1: `0.9470`
 
 The official submitted benchmark result is the `TOTAL` row in `results_part_c.tsv`.
 
@@ -110,10 +112,10 @@ Generated files:
 
 Final normalized results on the noisy benchmark:
 
-- WER: `0.1705`
-- Recall: `0.8414`
-- Precision: `0.8452`
-- F1: `0.8433`
+- WER: `0.1682`
+- Recall: `0.8437`
+- Precision: `0.8474`
+- F1: `0.8456`
 
 The official submitted noisy result is the `TOTAL` row in `results_part_c_noisy.tsv`.
 
@@ -121,11 +123,11 @@ The official submitted noisy result is the `TOTAL` row in `results_part_c_noisy.
 
 The model remains usable under strong background noise, but performance drops substantially relative to the clean benchmark:
 
-- clean normalized WER: `0.0601`
-- noisy normalized WER: `0.1705`
+- clean normalized WER: `0.0567`
+- noisy normalized WER: `0.1682`
 
 The increase in WER shows that background noise causes more substitutions, deletions, and insertions, especially function words and short words.
 
 ## Conclusion
 
-The raw baseline significantly underestimated the real quality of the model because it penalized many formatting and orthographic differences. After targeted normalization based on same-meaning word variants, removal of vowel marks, and removal of punctuation, the clean-benchmark WER dropped from `0.3592` to `0.0601`. Under strong background noise, the normalized WER increased to `0.1705`, showing a clear but expected robustness degradation.
+The raw baseline significantly underestimated the real quality of the model because it penalized many formatting and orthographic differences. After targeted normalization based on same-meaning word variants, removal of vowel marks, removal of punctuation, and selected equivalent number/date forms, the clean-benchmark WER dropped from `0.3592` to `0.0567`. Under strong background noise, the normalized WER increased to `0.1682`, showing a clear but expected robustness degradation.

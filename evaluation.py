@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import csv
 import re
@@ -34,9 +34,9 @@ PUNCT_TRANSLATION = str.maketrans(
         ">": " ",
         "_": " ",
         "-": " ",
-        "\u05be": " ",
-        "\u2013": " ",
-        "\u2014": " ",
+        "־": " ",
+        "–": " ",
+        "—": " ",
         "/": " ",
         "\\": " ",
     }
@@ -58,105 +58,6 @@ ORTHOGRAPHIC_VARIANTS = {
     "\u05e7\u05d5\u05e7\u05d8\u05d9\u05dc": "\u05e7\u05d5\u05e7\u05d8\u05d9\u05d9\u05dc",
     "\u05d1\u05d9\u05d3\u05d9\u05dd": "\u05d1\u05d9\u05d3\u05d9\u05d9\u05dd",
     "\u05e8\u05d5\u05d5\u05d9": "\u05e8\u05d1\u05d5\u05d9",
-}
-
-PARTNER_ADDITIONAL_REPLACEMENTS = {
-    "\u05d4\u05d9\u05ea\u05d4": "\u05d4\u05d9\u05d9\u05ea\u05d4",
-    "\u05d0\u05d9\u05ea\u05d9": "\u05d0\u05ea\u05d9",
-    "\u05de\u05e1\u05d9\u05dd": "\u05de\u05d9\u05e1\u05d9\u05dd",
-    "\u05d4\u05d1\u05d9\u05df \u05dc\u05d0\u05d5\u05de\u05d9\u05d9\u05dd": "\u05d4\u05d1\u05d9\u05e0\u05dc\u05d0\u05d5\u05de\u05d9\u05d9\u05dd",
-    "\u05d1\u05d9\u05ea \u05ea\u05e4\u05d9\u05dc\u05d4": "\u05d1\u05d9\u05ea \u05ea\u05e4\u05d9\u05dc\u05d4",
-    "\u05d5\u05d4\u05d0\u05de\u05e0\u05d5\u05ea": "\u05d5\u05d4\u05d0\u05d5\u05de\u05e0\u05d5\u05ea",
-    "\u05d0\u05dc\u05d9\u05d9": "\u05d0\u05dc\u05d9",
-    "\u05d9\u05d9\u05e4\u05dc\u05d5": "\u05d9\u05e4\u05dc\u05d5",
-    "\u05d1\u05e1\u05e4\u05d5\u05d8\u05d9\u05e4\u05d9\u05d9": "\u05d1\u05e1\u05e4\u05d5\u05d8\u05d9\u05e4\u05d9",
-    "\u05e9\u05e9\u05d9\u05d9\u05da": "\u05e9\u05e9\u05d9\u05da",
-    "\u05dc\u05e2\u05e1\u05ea": "\u05dc\u05e2\u05d9\u05e1\u05ea",
-    "\u05d0\u05e9\u05d4": "\u05d0\u05d9\u05e9\u05d4",
-    "\u05d0\u05dc\u05d4\u05d9\u05d4\u05dd": "\u05d0\u05dc\u05d5\u05d4\u05d9\u05d4\u05dd",
-    "\u05d5\u05de\u05ea\u05db\u05d5\u05e6\u05d9\u05dd": "\u05d5\u05de\u05ea\u05db\u05d5\u05d5\u05e6\u05d9\u05dd",
-    "\u05db\u05dc\u05dd": "\u05db\u05d5\u05dc\u05dd",
-    "\u05dc\u05e2\u05ea\u05d9\u05dd": "\u05dc\u05e2\u05d9\u05ea\u05d9\u05dd",
-    "\u05d2\u05dc\u05d9\u05e0\u05d5": "\u05d2\u05d9\u05dc\u05d9\u05e0\u05d5",
-    "\u05db\u05e9\u05d1\u05d5\u05e2\u05d9\u05dd": "\u05db\u05e9\u05d1\u05d5\u05e2\u05d9\u05d9\u05dd",
-    "\u05d1\u05de\u05d3\u05d4": "\u05d1\u05de\u05d9\u05d3\u05d4",
-    "\u05d0\u05d9\u05de\u05d4": "\u05d0\u05d9\u05d5\u05de\u05d4",
-    "\u05de\u05dc\u05db\u05d3\u05ea": "\u05de\u05dc\u05db\u05d5\u05d3\u05ea",
-    "\u05d0\u05e4\u05dc\u05d5": "\u05d0\u05e4\u05d9\u05dc\u05d5",
-    "\u05de\u05d8\u05ea\u05d4": "\u05de\u05d9\u05d8\u05ea\u05d4",
-    "\u05d1\u05d0\u05d5\u05e4\u05dc": "\u05d1\u05d0\u05e4\u05dc",
-    "\u05e2\u05db\u05e9\u05d5": "\u05e2\u05db\u05e9\u05d9\u05d5",
-    "\u05ea\u05d7\u05d6\u05e8": "\u05ea\u05d7\u05d6\u05d5\u05e8",
-    "\u05dc\u05d3\u05d5\u05d2\u05de\u05d4": "\u05dc\u05d3\u05d5\u05d2\u05de\u05d0",
-    "\u05d2\u05d9\u05d4\u05d9\u05e0\u05d5\u05dd": "\u05d2\u05d9\u05d4\u05e0\u05d5\u05dd",
-    "\u05de\u05d9\u05e0\u05d4\u05dc\u05d9": "\u05de\u05e0\u05d4\u05dc\u05d9",
-    "\u05d2\u05d6\u05d9\u05e8\u05d5\u05ea": "\u05d2\u05d6\u05e8\u05d5\u05ea",
-    "\u05dc\u05d9\u05e6\u05d2": "\u05dc\u05d9\u05d9\u05e6\u05d2",
-    "\u05e4\u05d9\u05e1\u05d1\u05d5\u05e7": "\u05e4\u05d9\u05d9\u05e1\u05d1\u05d5\u05e7",
-    "\u05d0\u05dc\u05d8\u05e8\u05e0\u05d8\u05d9\u05d1\u05d9\u05dd": "\u05d0\u05dc\u05d8\u05e8\u05e0\u05d8\u05d9\u05d1\u05d9\u05d9\u05dd",
-    "\u05d4\u05e8\u05d9\u05d9\u05e0\u05d5": "\u05d4\u05e8\u05d9\u05e0\u05d5",
-    "\u05dc\u05e2\u05d9\u05e4\u05d4": "\u05dc\u05e2\u05d9\u05d9\u05e4\u05d4",
-    "\u05db\u05d9\u05e9\u05e8\u05d5\u05e0\u05d5\u05ea": "\u05db\u05e9\u05e8\u05d5\u05e0\u05d5\u05ea",
-    "\u05d4\u05d6\u05d9\u05e7\u05e0\u05d4": "\u05d4\u05d6\u05e7\u05e0\u05d4",
-    "\u05d0\u05d4\u05e8\u05df": "\u05d0\u05d4\u05e8\u05d5\u05df",
-    "\u05d1\u05d3\u05d1\u05e8\u05d9": "\u05d1\u05d3\u05d1\u05e8\u05d9\u05d9",
-    "\u05d4\u05de\u05dc\u05d9\u05d5\u05e0\u05d9\u05dd": "\u05d4\u05de\u05d9\u05dc\u05d9\u05d5\u05e0\u05d9\u05dd",
-    "\u05d1\u05d4\u05e2\u05d3\u05e8": "\u05d1\u05d4\u05d9\u05e2\u05d3\u05e8",
-    "\u05d4\u05ea\u05d9\u05e9\u05d1\u05d5\u05ea": "\u05d4\u05ea\u05d9\u05d9\u05e9\u05d1\u05d5\u05ea",
-    "\u05d4\u05d9\u05e2\u05d3\u05e8": "\u05d4\u05e2\u05d3\u05e8",
-    "\u05dc\u05d9\u05d1\u05d9": "\u05dc\u05d1\u05d9",
-    "\u05de\u05e6\u05d3\u05dd": "\u05de\u05e6\u05d9\u05d3\u05dd",
-    "\u05e6\u05e4\u05d5\u05e8\u05d4": "\u05e6\u05d9\u05e4\u05d5\u05e8\u05d4",
-    "\u05ea\u05e1\u05e2": "\u05ea\u05d9\u05e1\u05e2",
-    "\u05d6\u05d9\u05db\u05e8\u05d5\u05e0\u05d5\u05ea": "\u05d6\u05db\u05e8\u05d5\u05e0\u05d5\u05ea",
-    "\u05e0\u05d4\u05e8\u05d9\u05d9\u05d4": "\u05e0\u05d4\u05e8\u05d9\u05d4",
-    "\u05d9\u05e7\u05d7 ": "\u05d9\u05d9\u05e7\u05d7 ",
-    "\u05dc\u05e7\u05e1\u05e7\u05dc\u05d9": "\u05dc\u05e7\u05e1\u05d9\u05e7\u05dc\u05d9",
-    "\u05d5\u05de\u05db\u05e2\u05e8": "\u05d5\u05de\u05db\u05d5\u05e2\u05e8",
-    "\u05d4\u05de\u05d9\u05e0\u05d4\u05dc\u05d9\u05d5\u05ea": "\u05d4\u05de\u05e0\u05d4\u05dc\u05d9\u05d5\u05ea",
-    "\u05dc\u05d0\u05e4\u05e0\u05d5": "\u05dc\u05d0\u05e4\u05d9\u05e0\u05d5",
-    " \u05e8\u05d1\u05d5\u05ea\u05d9": " \u05e8\u05d1\u05d5\u05ea\u05d9\u05d9",
-    "\u05d4\u05de\u05dc\u05d9\u05dd": "\u05d4\u05de\u05d9\u05dc\u05d9\u05dd",
-    "\u05d0\u05d9\u05e0\u05ea\u05d9\u05e4\u05d3\u05ea": "\u05d0\u05d9\u05e0\u05ea\u05d9\u05e4\u05d0\u05d3\u05ea",
-    "\u05e9\u05ea\u05d9\u05dd": "\u05e9\u05ea\u05d9\u05d9\u05dd",
-    " \u05d3\u05e8 ": " \u05d3\u05d5\u05e7\u05d8\u05d5\u05e8 ",
-    " \u05d1 ": "\u05d1 ",
-    " \u05dc ": "\u05dc ",
-    " \u05de ": "\u05de ",
-    " \u05db ": "\u05db ",
-    "\u05d1\u05e9\u05e2\u05d4 \u05d0\u05e8\u05d1\u05e2": "\u05d1\u05e9\u05e2\u05d4 16",
-    "\u05e9\u05d1\u05e2\u05d9\u05dd \u05d0\u05d7\u05d5\u05d6\u05d9\u05dd": "70%",
-    "\u05d7\u05de\u05d9\u05e9\u05d4 \u05d0\u05d7\u05d5\u05d6": "5%",
-    "\u05e9\u05de\u05d5\u05e0\u05d9\u05dd \u05d0\u05d7\u05d5\u05d6\u05d9\u05dd": "80%",
-    "\u05e2\u05e9\u05e8\u05d9\u05dd \u05d5\u05ea\u05e9\u05e2\u05d4 \u05d0\u05d7\u05d5\u05d6\u05d9\u05dd": "29%",
-    "\u05e2\u05e9\u05e8\u05d9\u05dd \u05d5\u05e9\u05d9\u05e9\u05d4": "26",
-    "\u05d0\u05e8\u05d1\u05e2 \u05e2\u05e9\u05e8\u05d4": "14",
-    "\u05db\u05d0\u05e8\u05d1\u05e2 \u05de\u05d0\u05d5\u05ea \u05d0\u05dc\u05e3": "400000\u05db",
-    "\u05de\u05d0\u05ea\u05d9\u05d9\u05dd \u05e9\u05de\u05d5\u05e0\u05d9\u05dd \u05d5\u05d0\u05d7\u05d3 \u05d0\u05dc\u05e3": "281000",
-    "\u05de\u05d0\u05d4 \u05d5\u05d7\u05de\u05d9\u05e9\u05d9\u05dd \u05d0\u05dc\u05e3": "150000",
-    "\u05e9\u05dc\u05d5\u05e9\u05d9\u05dd \u05d0\u05dc\u05e3": "30000",
-    "\u05e2\u05e9\u05e8\u05d9\u05dd \u05d5\u05e9\u05dc\u05d5\u05e9\u05d4 \u05d0\u05dc\u05e3": "23000",
-    "\u05e2\u05e9\u05e8\u05d9\u05dd \u05d5\u05e9\u05e0\u05d9\u05d9\u05dd \u05d0\u05dc\u05e3": "22000",
-    "\u05d7\u05de\u05e9\u05ea \u05d0\u05dc\u05e4\u05d9\u05dd": "5000",
-    "\u05d0\u05dc\u05e4\u05d9\u05d9\u05dd \u05d5\u05d0\u05d7\u05ea \u05e2\u05e9\u05e8\u05d4": "2011",
-    "\u05d0\u05dc\u05e4\u05d9\u05d9\u05dd \u05d5\u05e9\u05dc\u05d5\u05e9 \u05e2\u05e9\u05e8\u05d4": "2013",
-    "\u05d0\u05dc\u05e4\u05d9\u05d9\u05dd \u05d5\u05e9\u05ea\u05d9\u05dd \u05e2\u05e9\u05e8\u05d4": "2012",
-    "\u05d0\u05dc\u05e4\u05d9\u05d9\u05dd \u05d5\u05e9\u05de\u05d5\u05e0\u05d4": "2008",
-    "\u05d0\u05dc\u05e4\u05d9\u05d9\u05dd \u05d5\u05e9\u05e9": "2006",
-    "\u05d0\u05dc\u05e4\u05d9\u05d9\u05dd \u05d5\u05e9\u05dc\u05d5\u05e9": "2003",
-    "\u05d0\u05dc\u05e4\u05d9\u05d9\u05dd": "2000",
-    "\u05d0\u05dc\u05e3 \u05de\u05d0\u05d4 \u05d5\u05e9\u05de\u05d5\u05e0\u05d9\u05dd": "1180",
-    "\u05d0\u05dc\u05e3 \u05d5\u05d7\u05de\u05e9 \u05de\u05d0\u05d5\u05ea": "1500",
-    "\u05d0\u05dc\u05e3 \u05ea\u05e9\u05e2 \u05de\u05d0\u05d5\u05ea \u05e9\u05de\u05d5\u05e0\u05d9\u05dd \u05d5\u05e9\u05de\u05d5\u05e0\u05d4": "1988",
-    "\u05d0\u05dc\u05e3 \u05ea\u05e9\u05e2 \u05de\u05d0\u05d5\u05ea \u05d7\u05de\u05d9\u05e9\u05d9\u05dd \u05d5\u05e9\u05e9": "1956",
-    "\u05de\u05d0\u05d4 \u05d5\u05d0\u05e8\u05d1\u05e2\u05d9\u05dd": "140",
-    "\u05e2\u05e9\u05e8\u05d9\u05dd \u05d5\u05ea\u05e9\u05e2\u05d4": "29",
-    "\u05e2\u05e9\u05e8\u05d9\u05dd": "20",
-    "\u05e9\u05ea\u05d9\u05dd \u05e2\u05e9\u05e8\u05d4": "12",
-    "\u05d7\u05de\u05d9\u05e9\u05d4 \u05e2\u05e9\u05e8": "15",
-    "\u05e9\u05dc\u05d5\u05e9 \u05e2\u05e9\u05e8\u05d4": "13",
-    "\u05e9\u05d1\u05e2\u05d4": "7",
-    "\u05e9\u05d1\u05e2": "7",
 }
 
 SINGLE_NUMBER_WORDS = {
@@ -451,19 +352,160 @@ def normalize(text: str) -> str:
         return ""
 
     text = text.strip().lower()
-    for char in ["-", "\u2013", "\u2014", "_", "\u05be", "\u2019"]:
+    text = re.sub(r"(?<=\d)[./-](?=\d)", " ", text)
+    text = re.sub(r"(\d+)\s*%", lambda match: f"{match.group(1)} \u05d0\u05d7\u05d5\u05d6", text)
+    text = HEBREW_DIACRITICS_RE.sub("", text)
+    text = text.translate(PUNCT_TRANSLATION)
+    text = text.replace("״", "").replace("׳", "")
+    for source, target in PHRASE_NUMBER_WORDS.items():
+        text = text.replace(source, target)
+    text = re.sub(r"\s+", " ", text).strip()
+
+    normalized_tokens: list[str] = []
+    for token in text.split():
+        clean_token = HEBREW_TOKEN_RE.sub("", token)
+        if not clean_token:
+            continue
+        normalized_tokens.append(_normalize_number_token(clean_token))
+
+    return " ".join(_collapse_numeric_tokens(normalized_tokens))
+
+
+def normalize_text_func(text):
+    if not text:
+        return ""
+
+    # 2. STANDARDIZE DASHES FIRST (Prioritize over deletion)
+    # Replace all hyphen/dash types with a SPACE to keep words separate
+    for char in ["-", "–", "—", "_", "־", "’"]:
         text = text.replace(char, " ")
 
-    text = HEBREW_DIACRITICS_RE.sub("", text)
-    text = text.replace("\u05f4", "")
+    # 1. Remove Hebrew Niqqud
+    text = re.sub(r"[\u0591-\u05C7]", "", text)
 
-    for char in '.,?!:;"\'()[]{}<>':
+    # 3. Handle Hebrew-specific marks
+    # Gershayim (״) usually joins acronyms (צה״ל -> צהל), so we use empty string here
+    text = text.replace("״", "")
+
+    # 4. Remove Other Punctuation
+    # Use empty string for marks that don't separate words (like periods at end of sentences)
+    for char in '.,?!:;"\'()[]{}<>“‘’“”':
         text = text.replace(char, "")
 
-    for source, target in PARTNER_ADDITIONAL_REPLACEMENTS.items():
-        text = text.replace(source, target)
+    # 4. Manual Fixes
+    replacements = {
+        "היתה": "הייתה",
+        "הכול": "הכל",
+        "מייד": "מיד",
+        "ואלו": "ואילו",
+        "איתי": "אתי",
+        "מסים": "מיסים",
+        "קוקטיל": "קוקטייל",
+        "הבין לאומיים": "הבינלאומיים",
+        "בית תפילה": "בית תפילה",
+        "והאמנות": "והאומנות",
+        "מאד": "מאוד",
+        "אליי": "אלי",
+        "ייפלו": "יפלו",
+        "בספוטיפיי": "בספוטיפי",
+        "ששייך": "ששיך",
+        "באזניך": "באוזניך",
+        "לעסת": "לעיסת",
+        "בידים": "בידיים",
+        "אשה": "אישה",
+        "אלהיהם": "אלוהיהם",
+        "ומתכוצים": "ומתכווצים",
+        "כלם": "כולם",
+        "לעתים": "לעיתים",
+        "גלינו": "גילינו",
+        "כשבועים": "כשבועיים",
+        "במדה": "במידה",
+        "מלכדת": "מלכודת",
+        "אפלו": "אפילו",
+        "מטתה": "מיטתה",
+        "באופל": "באפל",
+        "עכשו": "עכשיו",
+        "תחזר": "תחזור",
+        "לדוגמה": "לדוגמא",
+        "גיהינום": "גיהנום",
+        "מינהלי": "מנהלי",
+        "גזירות": "גזרות",
+        "ליצג": "לייצג",
+        "פיסבוק": "פייסבוק",
+        "אלטרנטיבים": "אלטרנטיביים",
+        "הריינו": "הרינו",
+        "לעיפה": "לעייפה",
+        "כישרונות": "כשרונות",
+        "הזיקנה": "הזקנה",
+        "אהרן": "אהרון",
+        "בדברי": "בדבריי",
+        "המליונים": "המיליונים",
+        "בהעדר": "בהיעדר",
+        "התישבות": "התיישבות",
+        "היעדר": "העדר",
+        "ליבי": "לבי",
+        "מצדם": "מצידם",
+        "צפורה": "ציפורה",
+        "תסע": "תיסע",
+        "זיכרונות": "זכרונות",
+        "נהרייה": "נהריה",
+        "יקח ": "ייקח ",
+        "לקסקלי": "לקסיקלי",
+        "ומכער": "ומכוער",
+        "המינהליות": "המנהליות",
+        "לאפנו": "לאפינו",
+        " רבותי": " רבותיי",
+        "המלים": "המילים",
+        "אינתיפדת": "אינתיפאדת",
+        "שתים": "שתיים",
+        "תימצא": "תמצא",
+        " דר ": " דוקטור ",
+        " ב ": "ב ",
+        " ל ": "ל ",
+        " מ ": "מ ",
+        " כ ": "כ ",
+        "בשעה ארבע": "בשעה 16",
+        "שבעים אחוזים": "70%",
+        "חמישה אחוז": "5%",
+        "שמונים אחוזים": "80%",
+        "עשרים ותשעה אחוזים": "29%",
+        "עשרים ושישה": "26",
+        "ארבע עשרה": "14",
+        "כארבע מאות אלף": "400000כ",
+        "מאתיים שמונים ואחד אלף": "281000",
+        "מאה וחמישים אלף": "150000",
+        "שלושים אלף": "30000",
+        "עשרים ושלושה אלף": "23000",
+        "עשרים ושניים אלף": "22000",
+        "חמשת אלפים": "5000",
+        "אלפיים ואחת עשרה": "2011",
+        "אלפיים ושלוש עשרה": "2013",
+        "אלפיים ושתים עשרה": "2012",
+        "אלפיים ושמונה": "2008",
+        "אלפיים ושש": "2006",
+        "אלפיים ושלוש": "2003",
+        "אלפיים": "2000",
+        "אלף מאה ושמונים": "1180",
+        "אלף וחמש מאות": "1500",
+        "אלף תשע מאות שמונים ושמונה": "1988",
+        "אלף תשע מאות חמישים ושש": "1956",
+        "ארבע מאות": "400",
+        "שלוש מאות": "300",
+        "מאה וארבעים": "140",
+        "עשרים ותשעה": "29",
+        "עשרים": "20",
+        "שתים עשרה": "12",
+        "חמישה עשר": "15",
+        "שלוש עשרה": "13",
+        "שבעה": "7",
+        "שבע": "7",
+        "שתיים": "2",
+    }
 
-    return re.sub(r"\s+", " ", text).strip()
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    return text
 
 
 def format_alignment(alignment: Iterable[Tuple[str | None, str | None]]) -> str:
@@ -476,8 +518,8 @@ def score_texts(
     normalize_text: bool = False,
 ) -> tuple[AccuracyStatistics, List[Tuple[str | None, str | None]], str, str]:
     if normalize_text:
-        reference_text = normalize(reference_text)
-        hypothesis_text = normalize(hypothesis_text)
+        reference_text = normalize_text_func(reference_text)
+        hypothesis_text = normalize_text_func(hypothesis_text)
 
     weights = WordEditWeights()
     _, alignment = sequences_align(reference_text.split(), hypothesis_text.split(), weights)
@@ -601,4 +643,3 @@ def evaluate_results_file(
                 writer.writerow({"Reference": ref_word, "Hypothesis": hyp_word, "Count": count})
 
     return global_stats
-
