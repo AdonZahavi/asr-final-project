@@ -65,7 +65,15 @@ The final normalization pipeline performs:
 2. removal of punctuation and quote-like symbols
 3. whitespace normalization
 4. normalization of common Hebrew word variants that preserve the same meaning
-5. normalization of frequent numeric and percentage expressions
+5. selected normalization of frequent date, number, and percentage expressions when the semantic content stays the same
+
+### Iterative improvement
+
+The normalization was developed in stages and evaluated after each stage on the full benchmark:
+
+1. Raw baseline evaluation: `WER 0.3592`
+2. Conservative normalization of vowel marks, punctuation, and common orthographic variants: WER dropped into the single-digit range during development
+3. Expanded normalization of same-meaning variants and common numeric/date/percentage forms: `WER 0.0601`
 
 ### Final clean-benchmark results
 
@@ -76,10 +84,10 @@ The final normalization pipeline performs:
 
 Final normalized results on the clean benchmark:
 
-- WER: `0.0595`
-- Recall: `0.9438`
-- Precision: `0.9451`
-- F1: `0.9444`
+- WER: `0.0601`
+- Recall: `0.9432`
+- Precision: `0.9444`
+- F1: `0.9438`
 
 This reached the assignment target of single-digit WER.
 
@@ -111,11 +119,11 @@ Final normalized results on the noisy benchmark:
 
 The model remains usable under strong background noise, but performance drops substantially relative to the clean benchmark:
 
-- clean normalized WER: `0.0595`
+- clean normalized WER: `0.0601`
 - noisy normalized WER: `0.1705`
 
 The increase in WER shows that background noise causes more substitutions, deletions, and insertions, especially function words and short words.
 
 ## Conclusion
 
-The raw baseline significantly underestimated the real quality of the model because it penalized many formatting and orthographic differences. After targeted normalization based on same-meaning word variants, removal of vowel marks, and removal of punctuation, the clean-benchmark WER dropped from `0.3592` to `0.0595`. Under strong background noise, the normalized WER increased to `0.1705`, showing a clear but expected robustness degradation.
+The raw baseline significantly underestimated the real quality of the model because it penalized many formatting and orthographic differences. After targeted normalization based on same-meaning word variants, removal of vowel marks, and removal of punctuation, the clean-benchmark WER dropped from `0.3592` to `0.0601`. Under strong background noise, the normalized WER increased to `0.1705`, showing a clear but expected robustness degradation.

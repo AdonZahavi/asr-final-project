@@ -446,7 +446,7 @@ def _collapse_numeric_tokens(tokens: list[str]) -> list[str]:
     return collapsed
 
 
-def normalize(text: str) -> str:
+def _normalize_legacy_numeric(text: str) -> str:
     if not text:
         return ""
 
@@ -472,7 +472,7 @@ def normalize(text: str) -> str:
     return " ".join(_collapse_numeric_tokens(normalized_tokens))
 
 
-def normalize(text: str) -> str:
+def _normalize_partner_experiment(text: str) -> str:
     if not text:
         return ""
 
