@@ -53,7 +53,6 @@ The raw evaluation penalized the system for many differences that do not reflect
 - Hebrew vowel marks, diacritics, and quote marks
 - spelling variants that keep the same meaning
 - orthographic variants of common Hebrew words
-- some number expressions written as words in one side and digits in the other
 
 The goal was to change only surface form differences and same-meaning variants, as required by the assignment, and not to rewrite genuinely different content.
 
@@ -65,15 +64,14 @@ The final normalization pipeline performs:
 2. removal of punctuation and quote-like symbols
 3. whitespace normalization
 4. normalization of common Hebrew word variants that preserve the same meaning
-5. selected normalization of frequent date, number, and percentage expressions when the semantic content stays the same
 
 ### Iterative improvement
 
 The normalization was developed in stages and evaluated after each stage on the full benchmark:
 
 1. Raw baseline evaluation: `WER 0.3592`
-2. Conservative normalization of vowel marks, punctuation, and common orthographic variants: WER dropped into the single-digit range during development
-3. Expanded normalization of same-meaning variants and common numeric/date/percentage forms: `WER 0.0601`
+2. Conservative normalization of vowel marks and punctuation: WER dropped substantially relative to the raw baseline
+3. Expanded normalization of same-meaning orthographic variants: `WER 0.0601`
 
 ### Final clean-benchmark results
 
@@ -88,6 +86,8 @@ Final normalized results on the clean benchmark:
 - Recall: `0.9432`
 - Precision: `0.9444`
 - F1: `0.9438`
+
+The official submitted benchmark result is the `TOTAL` row in `results_part_c.tsv`.
 
 This reached the assignment target of single-digit WER.
 
@@ -114,6 +114,8 @@ Final normalized results on the noisy benchmark:
 - Recall: `0.8414`
 - Precision: `0.8452`
 - F1: `0.8433`
+
+The official submitted noisy result is the `TOTAL` row in `results_part_c_noisy.tsv`.
 
 ### Interpretation
 

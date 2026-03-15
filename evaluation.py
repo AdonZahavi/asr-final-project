@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import csv
 import re
@@ -34,9 +34,9 @@ PUNCT_TRANSLATION = str.maketrans(
         ">": " ",
         "_": " ",
         "-": " ",
-        "־": " ",
-        "–": " ",
-        "—": " ",
+        "\u05be": " ",
+        "\u2013": " ",
+        "\u2014": " ",
         "/": " ",
         "\\": " ",
     }
@@ -446,54 +446,6 @@ def _collapse_numeric_tokens(tokens: list[str]) -> list[str]:
     return collapsed
 
 
-def _normalize_legacy_numeric(text: str) -> str:
-    if not text:
-        return ""
-
-    text = text.strip().lower()
-    text = re.sub(r"(?<=\d)[./-](?=\d)", " ", text)
-    text = re.sub(r"(\d+)\s*%", lambda match: f"{match.group(1)} \u05d0\u05d7\u05d5\u05d6", text)
-    text = HEBREW_DIACRITICS_RE.sub("", text)
-    text = text.translate(PUNCT_TRANSLATION)
-    text = text.replace("״", "").replace("׳", "")
-    for source, target in PARTNER_ADDITIONAL_REPLACEMENTS.items():
-        text = text.replace(source, target)
-    for source, target in PHRASE_NUMBER_WORDS.items():
-        text = text.replace(source, target)
-    text = re.sub(r"\s+", " ", text).strip()
-
-    normalized_tokens: list[str] = []
-    for token in text.split():
-        clean_token = HEBREW_TOKEN_RE.sub("", token)
-        if not clean_token:
-            continue
-        normalized_tokens.append(_normalize_number_token(clean_token))
-
-    return " ".join(_collapse_numeric_tokens(normalized_tokens))
-
-
-def _normalize_partner_experiment(text: str) -> str:
-    if not text:
-        return ""
-
-    text = text.strip().lower()
-
-    # Mirror the partner normalization flow exactly for this experiment.
-    for char in ["-", "ג€“", "ג€”", "_", "ײ¾", "ג€™"]:
-        text = text.replace(char, " ")
-
-    text = HEBREW_DIACRITICS_RE.sub("", text)
-    text = text.replace("\u05f4", "")
-
-    for char in '.,?!:;"\'()[]{}<>ג€ג€˜ג€™ג€ג€':
-        text = text.replace(char, "")
-
-    for source, target in PARTNER_ADDITIONAL_REPLACEMENTS.items():
-        text = text.replace(source, target)
-
-    return re.sub(r"\s+", " ", text).strip()
-
-
 def normalize(text: str) -> str:
     if not text:
         return ""
@@ -649,3 +601,4 @@ def evaluate_results_file(
                 writer.writerow({"Reference": ref_word, "Hypothesis": hyp_word, "Count": count})
 
     return global_stats
+
