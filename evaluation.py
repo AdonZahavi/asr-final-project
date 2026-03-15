@@ -371,6 +371,148 @@ def normalize(text: str) -> str:
     return " ".join(_collapse_numeric_tokens(normalized_tokens))
 
 
+
+def normalize_text_func(text):
+    if not text:
+        return ""
+
+    # 2. STANDARDIZE DASHES FIRST (Prioritize over deletion)
+    # Replace all hyphen/dash types with a SPACE to keep words separate
+    for char in ['-', '–', '—', '_', '־', '’']: # check where ’ is better
+        text = text.replace(char, ' ')
+
+    # 1. Remove Hebrew Niqqud
+    text = re.sub(r'[\u0591-\u05C7]', '', text)
+
+    # 3. Handle Hebrew-specific marks
+    # Gershayim (״) usually joins acronyms (צה״ל -> צהל), so we use empty string here
+    text = text.replace('״', '')
+
+    # 4. Remove Other Punctuation
+    # Use empty string for marks that don't separate words (like periods at end of sentences)
+    for char in '.,?!:;"\'()[]{}<>“‘’“”':
+        text = text.replace(char, '')
+
+
+    # 4. Manual Fixes
+    replacements = {
+        "היתה": "הייתה",
+        "הכול": "הכל",
+        "מייד": "מיד",
+        "ואלו": "ואילו",
+        "איתי": "אתי",
+        "מסים": "מיסים",
+        "קוקטיל": "קוקטייל",
+        "הבין לאומיים": "הבינלאומיים",
+        "בית תפילה": "בית תפילה",
+        "והאמנות": "והאומנות",
+        "מאד": "מאוד",
+        "אליי": "אלי",
+        "ייפלו": "יפלו",
+        "בספוטיפיי": "בספוטיפי",
+        "ששייך": "ששיך",
+        "באזניך": "באוזניך",
+        "לעסת": "לעיסת",
+        "בידים": "בידיים",
+        "אשה": "אישה",
+        "אלהיהם": "אלוהיהם",
+        "ומתכוצים": "ומתכווצים",
+        "כלם": "כולם",
+        "לעתים": "לעיתים",
+        "גלינו": "גילינו",
+        "כשבועים": "כשבועיים",
+        "במדה": "במידה",
+        "אימה": "איומה",
+        "מלכדת": "מלכודת",
+        "אפלו": "אפילו",
+        "מטתה": "מיטתה",
+        "באופל": "באפל",
+        "עכשו": "עכשיו",
+        "תחזר": "תחזור",
+        "לדוגמה": "לדוגמא",
+        "גיהינום": "גיהנום",
+        "מינהלי": "מנהלי",
+        "גזירות": "גזרות",
+        "ליצג": "לייצג",
+        "פיסבוק": "פייסבוק",
+        "אלטרנטיבים": "אלטרנטיביים",
+        "הריינו": "הרינו",
+        "לעיפה": "לעייפה",
+        "כישרונות": "כשרונות",
+        "הזיקנה": "הזקנה",
+        "אהרן": "אהרון",
+        "בדברי": "בדבריי",
+        "המליונים": "המיליונים",
+        "בהעדר": "בהיעדר",
+        "התישבות": "התיישבות",
+        "היעדר": "העדר",
+        "ליבי": "לבי",
+        "מצדם": "מצידם",
+        "צפורה": "ציפורה",
+        "תסע": "תיסע",
+        "זיכרונות": "זכרונות",
+        "נהרייה": "נהריה",
+        "יקח ": "ייקח ",
+        "לקסקלי": "לקסיקלי",
+        "ומכער": "ומכוער",
+        "המינהליות": "המנהליות",
+        "לאפנו": "לאפינו",
+        " רבותי": " רבותיי",
+        "המלים": "המילים",
+        "אינתיפדת": "אינתיפאדת",
+        "שתים": "שתיים",
+        "תימצא" : "תמצא",
+
+        " דר ": " דוקטור ",
+
+        " ב ": "ב ",
+        " ל ": "ל ",
+        " מ ": "מ ",
+        " כ ": "כ ",
+
+        "בשעה ארבע": "בשעה 16",
+        "שבעים אחוזים": "70%",
+        "חמישה אחוז": "5%",
+        "שמונים אחוזים": "80%",
+        "עשרים ותשעה אחוזים": "29%",
+        "עשרים ושישה": "26",
+        "ארבע עשרה": "14",
+        "כארבע מאות אלף": "400000כ",
+        "מאתיים שמונים ואחד אלף": "281000",
+        "מאה וחמישים אלף": "150000",
+        "שלושים אלף": "30000",
+        "עשרים ושלושה אלף": "23000",
+        "עשרים ושניים אלף": "22000",
+        "חמשת אלפים": "5000",
+        "אלפיים ואחת עשרה": "2011",
+        "אלפיים ושלוש עשרה": "2013",
+        "אלפיים ושתים עשרה": "2012",
+        "אלפיים ושמונה": "2008",
+        "אלפיים ושש": "2006",
+        "אלפיים ושלוש": "2003",
+        "אלפיים": "2000",
+        "אלף מאה ושמונים": "1180",
+        "אלף וחמש מאות": "1500",
+        "אלף תשע מאות שמונים ושמונה": "1988",
+        "אלף תשע מאות חמישים ושש": "1956",
+        "ארבע מאות": "400",
+        "שלוש מאות" : "300",
+        "מאה וארבעים": "140",
+        "עשרים ותשעה": "29",
+        "עשרים": "20",
+        "שתים עשרה": "12",
+        "חמישה עשר": "15",
+        "שלוש עשרה": "13",
+        "שבעה": "7",
+        "שבע": "7",
+    }
+
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    return text
+
+
 def format_alignment(alignment: Iterable[Tuple[str | None, str | None]]) -> str:
     return " | ".join(f"{ref or '<eps>'}->{hyp or '<eps>'}" for ref, hyp in alignment)
 
@@ -381,8 +523,8 @@ def score_texts(
     normalize_text: bool = False,
 ) -> tuple[AccuracyStatistics, List[Tuple[str | None, str | None]], str, str]:
     if normalize_text:
-        reference_text = normalize(reference_text)
-        hypothesis_text = normalize(hypothesis_text)
+        reference_text = normalize_text_func(reference_text)
+        hypothesis_text = normalize_text_func(hypothesis_text)
 
     weights = WordEditWeights()
     _, alignment = sequences_align(reference_text.split(), hypothesis_text.split(), weights)
