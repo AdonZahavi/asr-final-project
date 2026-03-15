@@ -29,10 +29,10 @@ The baseline evaluation was computed from the raw transcription output using wor
 
 Final baseline results on the clean benchmark:
 
-- WER: `0.3585`
-- Recall: `0.6579`
-- Precision: `0.6560`
-- F1: `0.6570`
+- WER: `0.3592`
+- Recall: `0.6578`
+- Precision: `0.6554`
+- F1: `0.6566`
 
 ## Part C: error analysis and normalization
 
@@ -50,23 +50,22 @@ This made it possible to separate true ASR errors from artifacts caused by the e
 The raw evaluation penalized the system for many differences that do not reflect real recognition failures:
 
 - punctuation differences
-- Hebrew diacritics and quote marks
-- spelling variants such as `haita` / `hayta`
-- spelling variants of words such as `hakol`
-- spelling variants such as `misim` / `masim`
+- Hebrew vowel marks, diacritics, and quote marks
+- spelling variants that keep the same meaning
+- orthographic variants of common Hebrew words
 - some number expressions written as words in one side and digits in the other
 
-I intentionally did not normalize ambiguous pairs that may change meaning.
+The goal was to change only surface form differences and same-meaning variants, as required by the assignment, and not to rewrite genuinely different content.
 
 ### Final normalization rules
 
 The final normalization pipeline performs:
 
-1. removal of Hebrew diacritics
+1. removal of Hebrew vowel marks and other diacritics
 2. removal of punctuation and quote-like symbols
 3. whitespace normalization
-4. conservative normalization of common orthographic variants
-5. limited normalization of frequent number words into digits
+4. normalization of common Hebrew word variants that preserve the same meaning
+5. normalization of frequent numeric and percentage expressions
 
 ### Final clean-benchmark results
 
@@ -77,10 +76,10 @@ The final normalization pipeline performs:
 
 Final normalized results on the clean benchmark:
 
-- WER: `0.0773`
-- Recall: `0.9302`
-- Precision: `0.9309`
-- F1: `0.9305`
+- WER: `0.0595`
+- Recall: `0.9438`
+- Precision: `0.9451`
+- F1: `0.9444`
 
 This reached the assignment target of single-digit WER.
 
@@ -103,20 +102,20 @@ Generated files:
 
 Final normalized results on the noisy benchmark:
 
-- WER: `0.1858`
-- Recall: `0.8304`
-- Precision: `0.8340`
-- F1: `0.8322`
+- WER: `0.1705`
+- Recall: `0.8414`
+- Precision: `0.8452`
+- F1: `0.8433`
 
 ### Interpretation
 
 The model remains usable under strong background noise, but performance drops substantially relative to the clean benchmark:
 
-- clean normalized WER: `0.0773`
-- noisy normalized WER: `0.1858`
+- clean normalized WER: `0.0595`
+- noisy normalized WER: `0.1705`
 
 The increase in WER shows that background noise causes more substitutions, deletions, and insertions, especially function words and short words.
 
 ## Conclusion
 
-The raw baseline significantly underestimated the real quality of the model because it penalized many formatting and orthographic differences. After targeted normalization, the clean-benchmark WER dropped from `0.3585` to `0.0773`. Under strong background noise, the normalized WER increased to `0.1858`, showing a clear but expected robustness degradation.
+The raw baseline significantly underestimated the real quality of the model because it penalized many formatting and orthographic differences. After targeted normalization based on same-meaning word variants, removal of vowel marks, and removal of punctuation, the clean-benchmark WER dropped from `0.3592` to `0.0595`. Under strong background noise, the normalized WER increased to `0.1705`, showing a clear but expected robustness degradation.
