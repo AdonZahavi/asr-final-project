@@ -6,7 +6,7 @@ The project evaluates the Hebrew ASR model `ivrit-ai/whisper-large-v3-turbo-ct2`
 
 ## Part A
 
-For Part A, I transcribed the `test.tsv` split and saved the results in:
+For Part A, we transcribed the `test.tsv` split and saved the results in:
 
 - `results_part_a.tsv`
 
@@ -38,10 +38,10 @@ Final baseline results on the clean benchmark:
 
 ### Analysis method
 
-I analyzed the model output in two complementary ways:
+We analyzed the model output in two complementary ways:
 
-1. I inspected the full alignment log for individual utterances.
-2. I reviewed the most frequent error pairs over the full benchmark.
+1. We inspected the full alignment log for individual utterances.
+2. We reviewed the most frequent error pairs over the full benchmark.
 
 This made it possible to separate true ASR errors from artifacts caused by the evaluation procedure.
 
